@@ -1,13 +1,4 @@
-# starter_v0 — tool declarations (intentionally vague).
-# Names and descriptions here are a rough first draft. Routing rules, name->handle
-# mapping, arg conventions (news/timeframe/Top), and the send-confirmation boundary
-# are NOT spelled out anywhere yet. Your job is to make these declarations + the
-# system prompt good enough that the agent routes correctly on the eval.
-#
-# If you rename a tool, keep the name in sync across:
-#   this file  ->  tools/__init__.py (TOOL_FUNCTIONS)  ->  data/eval_base.json + data/eval_research_extension.json
 tools:
-  # ---------------- Core tools ----------------
   - name: clarify
     description: >-
       Dừng lại và hỏi người dùng đúng một câu trước khi làm tiếp.
@@ -108,6 +99,14 @@ tools:
         template: {type: string, enum: [brief, sections, bullets, thread, daily_ai_vn], default: "sections", description: "Khuôn"}
         headline: {type: string, default: "", description: "Tiêu đề"}
       required: [items, template]
+
+  - name: source_check
+    description: "Check whether a URL, domain, or source is suitable to cite before using it in a research answer. Use when the user asks to check source reliability, citation suitability, domain trust, or whether a link should be cited. Do not use to read article contents; use fetch for summarizing a URL."
+    parameters:
+      type: object
+      properties:
+        url: {type: string, default: "", description: "URL or domain to check."}
+      required: [url]
 
   # ---------------- Bonus tools ----------------
   - name: send

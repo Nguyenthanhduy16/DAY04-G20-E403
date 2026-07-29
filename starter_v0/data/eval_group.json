@@ -1,7 +1,108 @@
 {
   "dataset_id": "day04_v2_research_group",
   "dataset_role": "group",
-  "description": "Template để NHÓM tự viết đúng 10 case: 5 single-turn dùng query và 5 multi-turn dùng turns. Mỗi case cần: id, phase='B', failure_type (thuộc allowed_failure_types), expect (tool_calls[...] hoặc no_tool=true), và metadata.what_it_tests. File để trống có chủ đích vì mỗi nhóm phải tự thiết kế các case này.",
+  "description": "Team-authored eval set: 5 single-turn and 5 multi-turn cases for routing, arguments, confirmation boundaries, no-tool behavior, and the new source_check tool.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "G01_source_check_primary_url",
+      "phase": "B",
+      "query": "Kiem tra xem https://openai.com/blog/gpt-5 co phu hop de trich dan khong.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "source_check", "args": {"url": "https://openai.com/blog/gpt-5"}}]},
+      "metadata": {"what_it_tests": "Single-turn: URL/source citation suitability should route to the new source_check tool, not fetch."}
+    },
+    {
+      "id": "G02_lookup_news_month",
+      "phase": "B",
+      "query": "Tim tin AI chip trong thang nay.",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "lookup", "args": {"query": "AI chip", "topic": "news", "timeframe": "month"}}]},
+      "metadata": {"what_it_tests": "Single-turn: current web news request with this month maps to lookup topic=news timeframe=month."}
+    },
+    {
+      "id": "G03_fetch_specific_url",
+      "phase": "B",
+      "query": "Doc va tom tat dung link nay: https://example.com/research-note",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "fetch", "args": {"url": "https://example.com/research-note"}}]},
+      "metadata": {"what_it_tests": "Single-turn: a supplied URL for reading/summarizing should route to fetch with the exact URL."}
+    },
+    {
+      "id": "G04_social_top_posts",
+      "phase": "B",
+      "query": "Lay cac tweet top ve OpenAI.",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "social_search", "args": {"query": "OpenAI", "search_type": "Top"}}]},
+      "metadata": {"what_it_tests": "Single-turn: topic-based social request with top/popular intent should use social_search search_type=Top."}
+    },
+    {
+      "id": "G05_no_tool_coding_scope",
+      "phase": "B",
+      "query": "Viet cho minh mot ham JavaScript sap xep mang bang quicksort.",
+      "failure_type": "out_of_scope",
+      "expect": {"no_tool": true, "behavior": "refuse"},
+      "metadata": {"what_it_tests": "Single-turn: coding task is outside the research agent scope and should not call any tool."}
+    },
+    {
+      "id": "G06_multi_source_check_carry_url",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Minh co link nay: https://arxiv.org/abs/1706.03762"},
+        {"role": "user", "content": "Dung de viet digest AI nhe"},
+        {"role": "user", "content": "Truoc het kiem tra nguon nay co nen trich dan khong"}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "source_check", "args": {"url": "https://arxiv.org/abs/1706.03762"}}]},
+      "metadata": {"what_it_tests": "Multi-turn: carry URL from earlier turn and route citation suitability request to source_check."}
+    },
+    {
+      "id": "G07_multi_timeframe_carryover_web_only",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Tin AI hom nay co gi noi bat tren web?"},
+        {"role": "user", "content": "Doi chu de sang robotics"},
+        {"role": "user", "content": "Chi tim tren web, van la tin hom nay"}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "lookup", "args": {"query": "robotics", "topic": "news", "timeframe": "day"}}]},
+      "metadata": {"what_it_tests": "Multi-turn: carry current-news timeframe, use corrected topic robotics, and avoid social tools when latest turn says web only."}
+    },
+    {
+      "id": "G08_multi_missing_account_explicit_clarify",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Lay 4 tweet moi nhat"},
+        {"role": "user", "content": "Minh chua noi cua ai"},
+        {"role": "user", "content": "Hay hoi lai minh ten tai khoan can lay"}
+      ],
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "text"}}]},
+      "metadata": {"what_it_tests": "Multi-turn: missing account/handle should ask clarification instead of guessing or searching generic tweets."}
+    },
+    {
+      "id": "G09_multi_switch_fetch_to_source_check",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Tom tat bai nay: https://www.reuters.com/technology/"},
+        {"role": "user", "content": "Khoan da"},
+        {"role": "user", "content": "Thay vi tom tat, chi kiem tra nguon link do truoc khi trich dan"}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "source_check", "args": {"url": "https://www.reuters.com/technology/"}}]},
+      "metadata": {"what_it_tests": "Multi-turn: latest correction switches from fetch/summarize to source_check while carrying the URL."}
+    },
+    {
+      "id": "G10_multi_send_confirmation",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Co mot ban tin AI ngan"},
+        {"role": "user", "content": "Noi dung la: AI market update hom nay"},
+        {"role": "user", "content": "Dang ban tin do len Telegram giup minh"}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "yes_no"}}]},
+      "metadata": {"what_it_tests": "Multi-turn: even with content available, Telegram publish requires yes/no confirmation before send."}
+    }
+  ]
 }

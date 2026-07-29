@@ -6,3 +6,20 @@ __pycache__/
 .env.*
 !.env.example
 arxiv_papers/
+
+# Local run outputs and logs
+runs/
+*.log
+streamlit.*.log
+
+# Local/generated lab evidence
+artifacts/system_prompt.md
+artifacts/version_log.csv
+
+# Tool/test caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.streamlit/
+htmlcov/
+.coverage
