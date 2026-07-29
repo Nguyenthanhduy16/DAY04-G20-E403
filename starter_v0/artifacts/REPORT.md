@@ -24,7 +24,13 @@ Ví dụ: "Research agent: tìm tin theo từ khóa / theo tài khoản, đọc 
 
 > Dán public URL nếu người khác cần mở từ máy riêng; localhost cũng được nếu demo trực tiếp trên máy trình chiếu. Streamlit được khuyến nghị, nhưng nhóm có thể dùng bất kỳ framework nào.
 >
-> URL:
+> URL: [Link Tạm Cloudflare Tunnel] (Chạy qua script `scripts/deploy_app.py`)
+
+Cách chạy deploy và tạo tunnel tự động:
+```bash
+python scripts/deploy_app.py
+```
+
 
 ## A2. Tool agent có
 
