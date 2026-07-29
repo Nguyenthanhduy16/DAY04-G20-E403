@@ -29,7 +29,7 @@ Research agent: tìm tin tức và bài đăng theo từ khóa hoặc theo tài 
 
 **Link dùng thử (truy cập được trong showdown):**
 
-> URL: _(cập nhật khi deploy)_
+> URL:(http://sao-herbal-mandatory-discharge.trycloudflare.com/)
 
 ## A2. Tool agent có
 
