@@ -30,6 +30,15 @@ Research agent: tìm tin tức và bài đăng theo từ khóa hoặc theo tài 
 **Link dùng thử (truy cập được trong showdown):**
 
 > URL:(http://sao-herbal-mandatory-discharge.trycloudflare.com/)
+> Dán public URL nếu người khác cần mở từ máy riêng; localhost cũng được nếu demo trực tiếp trên máy trình chiếu. Streamlit được khuyến nghị, nhưng nhóm có thể dùng bất kỳ framework nào.
+>
+> URL: [Link Tạm Cloudflare Tunnel] (Chạy qua script `scripts/deploy_app.py`)
+
+Cách chạy deploy và tạo tunnel tự động:
+```bash
+python scripts/deploy_app.py
+```
+
 
 ## A2. Tool agent có
 
