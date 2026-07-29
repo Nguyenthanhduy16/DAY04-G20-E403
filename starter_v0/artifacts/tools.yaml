@@ -9,13 +9,22 @@
 tools:
   # ---------------- Core tools ----------------
   - name: clarify
-    description: "Gửi một câu hỏi cho người dùng."
+    description: >-
+      Dừng lại và hỏi người dùng đúng một câu trước khi làm tiếp.
+      DÙNG KHI: (a) thiếu một argument bắt buộc mà chỉ người dùng mới cung cấp được
+      (ai, link nào, tài liệu nào) — chọn response_type=text; (b) sắp thực hiện một
+      hành động ra ngoài hội thoại (gửi/đăng/publish) và cần người dùng duyệt —
+      chọn response_type=yes_no.
+      Nếu request VỪA là hành động gửi/đăng VỪA thiếu chi tiết, ưu tiên (b): xin
+      xác nhận yes_no trước, không hỏi thêm chi tiết bằng text.
+      KHÔNG DÙNG để trả lời người dùng, hoặc để hỏi thứ bạn tự suy ra được
+      (ví dụ handle của một người nổi tiếng đã được nêu tên).
     parameters:
       type: object
       properties:
-        question: {type: string, default: "", description: "Câu hỏi"}
-        response_type: {type: string, enum: [text, yes_no, choice], default: "text", description: "Kiểu trả lời"}
-        options: {type: array, default: [], items: {type: string}, description: "Các lựa chọn"}
+        question: {type: string, default: "", description: "Câu hỏi gửi cho người dùng, nêu rõ đang thiếu gì hoặc đang xin duyệt hành động gì"}
+        response_type: {type: string, enum: [text, yes_no, choice], default: "text", description: "text = xin một giá trị còn thiếu; yes_no = xin duyệt trước một hành động gửi/đăng; choice = cho chọn trong options"}
+        options: {type: array, default: [], items: {type: string}, description: "Các lựa chọn, chỉ dùng khi response_type=choice"}
       required: [question]
 
   - name: timeline
@@ -38,14 +47,37 @@ tools:
       required: [query]
 
   - name: lookup
-    description: "Tra cứu thông tin trên internet."
+    description: >-
+      Tìm thông tin trên web mở. DÙNG KHI người dùng hỏi tin tức, sự kiện, hoặc
+      kiến thức chung mà chưa đưa link cụ thể.
+      KHÔNG DÙNG khi người dùng đã đưa URL (dùng fetch), hoặc khi họ hỏi về những
+      gì người ta đang nói trên mạng xã hội (dùng social_search).
+      Luôn đặt topic và timeframe một cách tường minh; đừng dựa vào giá trị mặc định.
     parameters:
       type: object
       properties:
-        query: {type: string, default: "", description: "Truy vấn"}
-        topic: {type: string, enum: [general, news], default: "general", description: "Phân loại"}
-        timeframe: {type: string, enum: [day, week, month, year], default: "week", description: "Khoảng thời gian"}
-        max_results: {type: integer, default: 5, description: "Số kết quả"}
+        query: {type: string, default: "", description: "CHỈ chủ đề cần tìm, ở dạng ngắn nhất. Không thêm các từ như 'tin tức', 'news', 'mới nhất', 'hôm nay' vào đây — chúng thuộc về topic và timeframe. Ví dụ: 'Tin AI hôm nay có gì?' -> query='AI', KHÔNG phải 'AI news today'"}
+        topic: {type: string, enum: [general, news], default: "general", description: "BẮT BUỘC đặt tường minh mỗi lần gọi. Đặt news khi request nhắc tới tin/tin tức/thời sự/báo/news hoặc hỏi 'có gì mới'; đặt general cho tra cứu kiến thức không gắn thời sự. Khi phân vân giữa hai giá trị, chọn news"}
+        timeframe: {type: string, enum: [day, week, month, year], default: "week", description: "Ánh xạ từ mốc thời gian người dùng nói: 'hôm nay'/'today'/'mới nhất' -> day; 'tuần này' -> week; 'tháng này' -> month; 'năm nay' -> year. Không nêu mốc nào thì để week"}
+        max_results: {type: integer, default: 5, description: "Số kết quả, chỉ đặt khác 5 khi người dùng nêu rõ số lượng"}
+      required: [query, topic, timeframe]
+
+  - name: hn_search
+    description: >-
+      Tìm story trên Hacker News — diễn đàn của cộng đồng developer — kèm số điểm
+      upvote và số comment.
+      DÙNG KHI người dùng hỏi cụ thể về Hacker News / HN, hoặc hỏi cộng đồng
+      developer / dân kỹ thuật đang bàn gì và đánh giá thế nào về một công nghệ.
+      KHÔNG DÙNG cho tin tức báo chí nói chung (dùng lookup), cho post trên
+      Twitter/X (dùng social_search), hay khi người dùng không nhắc gì tới HN hoặc
+      cộng đồng developer. Đây không phải tool tìm kiếm mặc định.
+    parameters:
+      type: object
+      properties:
+        query: {type: string, default: "", description: "Chỉ chủ đề cần tìm, dạng ngắn. Không thêm 'hacker news' hay 'HN' vào đây"}
+        sort_by: {type: string, enum: [relevance, recent], default: "relevance", description: "relevance = story khớp nhất; recent = story mới nhất theo thời gian. Đặt recent khi người dùng hỏi 'mới nhất' / 'gần đây'"}
+        limit: {type: integer, default: 5, description: "Số story, tối đa 20. Chỉ đặt khác 5 khi người dùng nêu rõ số lượng"}
+        min_points: {type: integer, default: 0, description: "Lọc story có ít nhất N điểm. Đặt 100 khi người dùng hỏi bài nổi bật / được upvote nhiều; để 0 khi họ không nêu"}
       required: [query]
 
   - name: fetch
@@ -79,12 +111,19 @@ tools:
 
   # ---------------- Bonus tools ----------------
   - name: send
-    description: "Gửi một đoạn văn bản đi."
+    description: >-
+      Đăng một đoạn text lên Telegram channel của team. Đây là hành động ra ngoài
+      hội thoại và KHÔNG hoàn tác được.
+      BOUNDARY: không bao giờ gọi tool này ngay ở request đầu tiên. Phải gọi
+      clarify(response_type=yes_no) trước, và chỉ gọi send sau khi người dùng đã
+      nói đồng ý ở một lượt sau, với confirmed=true.
+      KHÔNG DÙNG như cách để trả lời người dùng: câu trả lời bình thường trả về
+      bằng text, không đẩy qua Telegram.
     parameters:
       type: object
       properties:
-        text: {type: string, default: "", description: "Nội dung"}
-        confirmed: {type: boolean, default: false, description: "Cờ xác nhận"}
+        text: {type: string, default: "", description: "Nội dung sẽ đăng lên channel"}
+        confirmed: {type: boolean, default: false, description: "Chỉ đặt true sau khi người dùng đã duyệt đúng nội dung này ở lượt trước. false sẽ trả về needs_confirmation và không gửi gì"}
       required: [text]
 
   - name: policy

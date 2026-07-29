@@ -8,6 +8,7 @@ import yaml
 # Folder names are intentionally vague to match the tool names students see.
 # The imported function names are the underlying implementations (unchanged).
 from .clarify.tool import ask_user
+from .hn_search.tool import search_hackernews
 from .papers.tool import arxiv_search
 from .paper_text.tool import get_arxiv_paper_text
 from .timeline.tool import get_user_tweets
@@ -29,6 +30,7 @@ TOOL_FUNCTIONS = {
     "timeline": get_user_tweets,
     "social_search": search_tweets,
     "lookup": web_search,
+    "hn_search": search_hackernews,
     "fetch": read_url,
     "format": render_digest,
     "send": send_telegram,
