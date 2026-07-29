@@ -1,7 +1,7 @@
 {
   "dataset_id": "day04_v2_research_group",
   "dataset_role": "group",
-  "description": "Team-authored eval set: 5 single-turn and 5 multi-turn cases for routing, arguments, confirmation boundaries, no-tool behavior, and the new source_check tool.",
+  "description": "Team-authored eval set: routing, arguments, confirmation boundaries, no-tool behavior, hn_search, source_check, and multi-turn correction cases.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
   "cases": [
     {
@@ -103,6 +103,146 @@
       "failure_type": "wrong_boundary",
       "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "yes_no"}}]},
       "metadata": {"what_it_tests": "Multi-turn: even with content available, Telegram publish requires yes/no confirmation before send."}
+    },
+    {
+      "id": "X01_hn_search_basic_routing",
+      "phase": "B",
+      "query": "Cộng đồng developer trên Hacker News đang bàn gì về Rust?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "hn_search", "args": {"query": "Rust"}}]},
+      "metadata": {"what_it_tests": "Single-turn: hỏi cụ thể cộng đồng developer/HN → phải dùng hn_search, không dùng lookup hay social_search."}
+    },
+    {
+      "id": "X02_hn_search_explicit_mention",
+      "phase": "B",
+      "query": "Tìm trên Hacker News các bài về AI agents.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "hn_search", "args": {"query": "AI agents"}}]},
+      "metadata": {"what_it_tests": "Single-turn: nhắc tên 'Hacker News' tường minh → phải route đúng hn_search."}
+    },
+    {
+      "id": "X03_hn_search_top_posts",
+      "phase": "B",
+      "query": "Bài nổi bật nhất về LLM trên HN là gì?",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "hn_search", "args": {"query": "LLM", "min_points": 100}}]},
+      "metadata": {"what_it_tests": "Single-turn: 'bài nổi bật/được upvote nhiều' → hn_search với min_points=100."}
+    },
+    {
+      "id": "X04_hn_search_recent",
+      "phase": "B",
+      "query": "Bài mới nhất về WebAssembly trên Hacker News.",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "hn_search", "args": {"query": "WebAssembly", "sort_by": "recent"}}]},
+      "metadata": {"what_it_tests": "Single-turn: 'mới nhất' → hn_search sort_by=recent, không phải relevance."}
+    },
+    {
+      "id": "X05_hn_not_for_news",
+      "phase": "B",
+      "query": "Tin tức báo chí về OpenAI hôm nay.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "lookup", "args": {"query": "OpenAI", "topic": "news", "timeframe": "day"}}]},
+      "metadata": {"what_it_tests": "Single-turn: 'tin tức báo chí' không phải HN → phải dùng lookup, KHÔNG dùng hn_search."}
+    },
+    {
+      "id": "X06_source_check_no_fetch",
+      "phase": "B",
+      "query": "Link https://medium.com/some-post có đáng tin để trích dẫn không?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "source_check", "args": {"url": "https://medium.com/some-post"}}]},
+      "metadata": {"what_it_tests": "Single-turn: hỏi độ tin cậy nguồn → source_check, KHÔNG fetch (fetch là để đọc nội dung)."}
+    },
+    {
+      "id": "X07_fetch_not_source_check",
+      "phase": "B",
+      "query": "Tóm tắt nội dung tại https://techcrunch.com/2026/07/ai-update giúp mình.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "fetch", "args": {"url": "https://techcrunch.com/2026/07/ai-update"}}]},
+      "metadata": {"what_it_tests": "Single-turn: có URL, yêu cầu đọc nội dung → fetch, KHÔNG source_check."}
+    },
+    {
+      "id": "X08_no_tool_translation",
+      "phase": "B",
+      "query": "Dịch câu này sang tiếng Anh: 'Trí tuệ nhân tạo đang thay đổi thế giới'.",
+      "failure_type": "out_of_scope",
+      "expect": {"no_tool": true, "behavior": "refuse"},
+      "metadata": {"what_it_tests": "Single-turn: tác vụ dịch thuật nằm ngoài scope research agent → không gọi tool."}
+    },
+    {
+      "id": "X09_no_tool_math",
+      "phase": "B",
+      "query": "Tính giúp mình 1234 * 5678 bằng bao nhiêu?",
+      "failure_type": "out_of_scope",
+      "expect": {"no_tool": true},
+      "metadata": {"what_it_tests": "Single-turn: câu toán học nằm ngoài scope → không gọi tool nào."}
+    },
+    {
+      "id": "X10_clarify_ambiguous_platform",
+      "phase": "B",
+      "query": "Tìm những bài hay nhất về Python.",
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "choice"}}]},
+      "metadata": {"what_it_tests": "Single-turn: 'bài hay nhất' mơ hồ platform (HN, Twitter, web) → clarify hỏi nguồn."}
+    },
+    {
+      "id": "X11_multi_hn_then_fetch",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Tìm bài nổi bật nhất về Rust trên Hacker News."},
+        {"role": "user", "content": "Hay đấy, giờ đọc chi tiết bài đầu tiên tại https://hn.rust-post.example.com đi."},
+        {"role": "user", "content": "Đọc đúng link đó thôi nhé."}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "fetch", "args": {"url": "https://hn.rust-post.example.com"}}]},
+      "metadata": {"what_it_tests": "Multi-turn: sau khi tìm HN, user cung cấp URL cụ thể → latest turn yêu cầu đọc nội dung → fetch đúng URL."}
+    },
+    {
+      "id": "X12_multi_hn_carryover_query",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Dev cộng đồng HN đang bàn gì về WebGPU?"},
+        {"role": "user", "content": "Còn về WebAssembly thì sao?"},
+        {"role": "user", "content": "Vẫn tìm trên HN nhé, đổi chủ đề thành WebAssembly thôi."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "hn_search", "args": {"query": "WebAssembly"}}]},
+      "metadata": {"what_it_tests": "Multi-turn: giữ nguồn HN, chỉ đổi query từ WebGPU sang WebAssembly ở latest turn."}
+    },
+    {
+      "id": "X13_multi_send_confirmed",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Đăng bản tin lên Telegram: 'AI weekly digest hôm nay'"},
+        {"role": "assistant", "content": "Bạn có chắc muốn đăng lên Telegram không?"},
+        {"role": "user", "content": "Có, đăng đi."}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {"tool_calls": [{"name": "send", "args": {"text": "AI weekly digest hôm nay", "confirmed": true}}]},
+      "metadata": {"what_it_tests": "Multi-turn: sau khi user xác nhận 'Có' ở turn cuối → gọi send với confirmed=true."}
+    },
+    {
+      "id": "X14_multi_send_refused",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Đăng tin này lên Telegram: 'Breaking AI news'"},
+        {"role": "assistant", "content": "Bạn có chắc muốn đăng lên Telegram không?"},
+        {"role": "user", "content": "Thôi không đăng nữa."}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {"no_tool": true},
+      "metadata": {"what_it_tests": "Multi-turn: user từ chối ở turn cuối → KHÔNG gọi send, không thực hiện hành động gì."}
+    },
+    {
+      "id": "X15_multi_switch_hn_to_web",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "HN đang bàn gì về React?"},
+        {"role": "user", "content": "Bỏ HN đi, tìm tin tức báo chí về React thôi."},
+        {"role": "user", "content": "Tin trong tháng này."}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "lookup", "args": {"query": "React", "topic": "news", "timeframe": "month"}}]},
+      "metadata": {"what_it_tests": "Multi-turn: user chuyển từ HN sang web news, giữ chủ đề React, apply timeframe=month từ latest turn."}
     }
   ]
 }
