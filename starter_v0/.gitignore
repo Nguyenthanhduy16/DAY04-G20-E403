@@ -8,7 +8,7 @@ __pycache__/
 arxiv_papers/
 
 # Local run outputs and logs
-runs/
+
 *.log
 streamlit.*.log
 

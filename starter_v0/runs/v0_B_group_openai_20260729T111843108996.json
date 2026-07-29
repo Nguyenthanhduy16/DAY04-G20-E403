@@ -1,0 +1,2038 @@
+{
+  "run_id": "v0_B_group_openai_20260729T111843108996",
+  "version": "v0",
+  "artifact_version": "v0+p99ea110257f1+te675f9122b23",
+  "prompt_hash": "99ea110257f18797373cc02d21279e9a003e1b9654ba82ea6306d890e105a9d6",
+  "tools_hash": "e675f9122b23c7c51dc09aefcb58aa5d3ccf36745f5fc9cff455238ae9b14fb2",
+  "phase": "B",
+  "suite": "group",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "system_prompt": "D:\\AI_thucchien\\DAY04-G20-E403\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "D:\\AI_thucchien\\DAY04-G20-E403\\starter_v0\\artifacts\\tools.yaml",
+  "eval_cases": "data\\eval_group.json",
+  "dataset_id": "day04_v2_research_group",
+  "dataset_role": "group",
+  "description": "Team-authored eval set: routing, arguments, confirmation boundaries, no-tool behavior, hn_search, source_check, and multi-turn correction cases.",
+  "generated_at": "2026-07-29T11:18:43",
+  "summary": {
+    "total_cases": 25,
+    "measured_cases": 25,
+    "provider_error_cases": 0,
+    "passed_cases": 24,
+    "case_accuracy": 0.96,
+    "tool_routing_accuracy": 0.96,
+    "argument_accuracy": 0.96,
+    "multiturn_accuracy": 1.0,
+    "failure_counts": {
+      "missing_info": 1
+    },
+    "observed_mismatch_counts": {
+      "missing_tool_call": 1
+    }
+  },
+  "results": [
+    {
+      "id": "G01_source_check_primary_url",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Single-turn: URL/source citation suitability should route to the new source_check tool, not fetch."
+      },
+      "input": "Kiem tra xem https://openai.com/blog/gpt-5 co phu hop de trich dan khong.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "source_check",
+            "args": {
+              "url": "https://openai.com/blog/gpt-5"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "source_check",
+            "args": {
+              "url": "https://openai.com/blog/gpt-5"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "source_check",
+          "args": {
+            "url": "https://openai.com/blog/gpt-5"
+          },
+          "result": {
+            "tool": "source_check",
+            "url": "https://openai.com/blog/gpt-5",
+            "domain": "openai.com",
+            "is_https": true,
+            "source_type": "primary_or_authoritative",
+            "risk_level": "low",
+            "citation_advice": "Good candidate for citation. Fetch the page before summarizing details."
+          }
+        }
+      ]
+    },
+    {
+      "id": "G02_lookup_news_month",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Single-turn: current web news request with this month maps to lookup topic=news timeframe=month."
+      },
+      "input": "Tim tin AI chip trong thang nay.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "AI chip",
+              "topic": "news",
+              "timeframe": "month"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "AI chip",
+              "topic": "news",
+              "timeframe": "month"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "AI chip",
+            "topic": "news",
+            "timeframe": "month"
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "AI chip",
+            "topic": "news",
+            "timeframe": "month",
+            "items": [
+              {
+                "title": "Exclusive-China's DeepSeek developing its own AI chip, sources say",
+                "url": "https://finance.yahoo.com/technology/ai/articles/exclusive-chinas-deepseek-developing-own-103437335.html",
+                "source": "finance.yahoo.com",
+                "summary": "A DeepSeek inference chip ​would target the fastest-growing segment of AI computing ​demand. As AI applications spread, more of the industry's computing work is shifting from training models to running them, which relies on specialised chips that can be cheaper and less power-hungry than general-purpose GPUs. [...] The chip is designed for inference — the stage of ‌AI computing in which a trained model generates responses for users — rather than for training new models, the sources said.\n\nIf successful, DeepSeek's expansion into semiconductor development would ‌mark a major strategic shift for a company widely hailed in China as the country's AI champion, potentially adding to challenges faced by Chinese tech giant Huawei.\n\nShares of U.S.-based Nvidia slipped about 1.6% in premarket trading. [...] With an in-house chip, DeepSeek ‌would be joining other global AI developers in seeking greater control over the hardware behind their models and reduced dependence on Nvidia's.\n\nOpenAI last month unveiled Jalapeno, its first custom inference chip, developed with Broadcom, while Anthropic has been weighing building its own AI chips, Reuters reported in April.",
+                "score": 0.81524754
+              },
+              {
+                "title": "Meta to put AI chip into production in September as it looks to double computing capacity, Reuters reports",
+                "url": "https://www.cnbc.com/2026/07/09/meta-to-put-ai-chip-into-production-in-september-report.html",
+                "source": "cnbc.com",
+                "summary": "The tech firm's data center chip, code-named \"Iris\", is part of a four-generation project for Meta Training and Inference Accelerators (MTIA) that it will design in-house. The plan is to use custom-built silicon to improve the AI that powers its Facebook and Instagram social media platforms. [...] The chip is aimed at augmenting the large quantities of graphics processing units (GPUs) used for AI applications that Meta purchases from Nvidia and AMD.\n\nHowever, adopting the latest GPUs at a firm as large as Meta \"has been a heavy lift, and it has cost us time,\" the memo showed. [...] Meta Platforms plans to start manufacturing an artificial intelligence chip from September as part of its plan to boost overall computing power to 14 gigawatts next year, according to an internal memo reviewed by Reuters.",
+                "score": 0.78788257
+              },
+              {
+                "title": "Google is working on a new AI chip designed to make ...",
+                "url": "https://techcrunch.com/2026/07/20/google-is-working-on-a-new-ai-chip-designed-to-make-gemini-more-efficient",
+                "source": "techcrunch.com",
+                "summary": "AI companies have increasingly sought to produce their own chips as a way to make their in-house models run more efficiently and to address global shortages in AI computing capacity. Such efficiency has become a key selling point for tech companies as concerns about AI spend have dampened the market euphoria that previously characterized the industry. At the same time, firms are engaged in an ongoing attempt to wean themselves off chipmaker Nvidia, which has historically dominated the AI chip [...] The new chip, internally dubbed “Frozen v2,” is slated to be released sometime in 2028, The Information reported, citing anonymous sources. According to the report, the chip could be between six and 10 times more efficient than Google’s existing AI chips, measured by the number of tokens generated per unit of power.\n\nIn a response to TechCrunch, the company didn’t directly confirm the report. It didn’t deny it either. [...] In June, OpenAI announced its first custom chip, an inference processor dubbed Jalapeño. Earlier this month, it was reported that Anthropic was discussing a new chipmaking partnership with Samsung.",
+                "score": 0.752468
+              },
+              {
+                "title": "Meet Genesis: the AI chip that doesn’t forget",
+                "url": "https://news.utsa.edu/2026/07/genesis-the-ai-chip-that-doesnt-forget",
+                "source": "news.utsa.edu",
+                "summary": "One of artificial intelligence’s most stubborn problems is AI systems being able to accumulate new knowledge without losing what had been previously learned. A team of researchers at the MATRIX AI Consortium at The University of Texas at San Antonio may have solved this issue with Genesis, a spiking neuromorphic accelerator chip that would enable on-device continual learning across its operational lifetime. [...] The chips are fabricated through a partnership with SUNY Albany using IBM’s 65nm technology. This research effort is supported by a multi-million-dollar, five-year grant from the Air Force Research Laboratory (AFRL), highlighting UT San Antonio’s growing leadership in AI hardware innovation, semiconductor design and energy-efficient intelligent systems. [...] Genesis is designed for the parts of the world where there is no data center or reliable connection to the cloud to offload information. It runs on milliwatts, low enough for implantable medical devices, field-deployed drones, and wearable sensors that need to keep learning for years without a recharge or a reset. It’s designed for real-world uses where the information is cumulative, and the system improves the longer it runs and learns.",
+                "score": 0.73023266
+              },
+              {
+                "title": "Apple chasing AI chip company deals, The Information reports",
+                "url": "https://www.reuters.com/business/apple-chasing-ai-chip-company-deals-information-reports-2026-07-15",
+                "source": "reuters.com",
+                "summary": "It had originally planned to ship ​a future version of its AI server chip, known internally as \"Baltra\", this year, but the project has been pushed back, people familiar with the ​matter told The Information. \n   Apple did not immediately respond to ​a request for comment. Reuters could not independently verify the report. [...] The iPhone maker has approached chip startups to gauge their interest in a buyout and has spoken with bankers ​about possible deals, the report said. \n   Apple's interest comes as ​it faces challenges with the performance of its in-house ⁠AI servers, which currently run on internally designed M2 ​Ultra chips, according to The Information. [...] Apple has historically avoided large acquisitions, last ​making a deal in January for Q.ai, an ​Israeli company ⁠working on AI technology for audio. \n   The company had $45.57 billion in cash and cash equivalents as of March 28, the end of ⁠its ​second quarter. \n   Last week, Apple said it ​plans to spend over $30 billion under a multi-year chip supply deal with Broadcom (AVGO.O), opens new tab, bolstering its ​domestic sourcing.",
+                "score": 0.6496014
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G03_fetch_specific_url",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Single-turn: a supplied URL for reading/summarizing should route to fetch with the exact URL."
+      },
+      "input": "Doc va tom tat dung link nay: https://example.com/research-note",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://example.com/research-note"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://example.com/research-note"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "fetch",
+          "args": {
+            "url": "https://example.com/research-note"
+          },
+          "result": {
+            "tool": "read_url",
+            "url": "https://example.com/research-note",
+            "items": [
+              {
+                "title": "Example Domain",
+                "url": "https://example.com/research-note",
+                "source": "example.com",
+                "summary": "# Example Domain\n\nThis domain is for use in documentation examples without needing permission. Avoid use in operations.\n\n[Learn more](https://iana.org/domains/example)"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G04_social_top_posts",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Single-turn: topic-based social request with top/popular intent should use social_search search_type=Top."
+      },
+      "input": "Lay cac tweet top ve OpenAI.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "OpenAI",
+              "search_type": "Top"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "OpenAI",
+              "search_type": "Top",
+              "limit": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "social_search",
+          "args": {
+            "query": "OpenAI",
+            "search_type": "Top",
+            "limit": 5
+          },
+          "result": {
+            "tool": "search_tweets",
+            "query": "OpenAI",
+            "search_type": "Top",
+            "items": [
+              {
+                "title": "OpenAI's newest AI escaped the test environment it was locked inside and hacked into another company on its OWN.",
+                "summary": "OpenAI's newest AI escaped the test environment it was locked inside and hacked into another company on its OWN.\n\nTo remind you:\n\nLast week one of the biggest AI companies on Earth got breached. \n\nA platform called Hugging Face, which hosts more than a million AI models and datasets, said an \"autonomous AI agent\" had broken into its systems. Nobody knew whose agent it was.\n\nFor five days the whole industry wondered who was behind it.\n\nYesterday OpenAI raised its hand and said it was them. Or more precisely, it was their models, acting completely on their own.\n\nSo what did these models actually do?\n\nOpenAI was running two of them, GPT-5.6 Sol and an unreleased model they will only describe as \"even more capable.\" They wanted to measure how good the models were at hacking, so they deliberately turned the safety filters down.\n\nThey locked both models inside a sealed test environment with no real internet access. The only task was a benchmark called ExploitGym, a set of 898 real software vulnerabilities where the model has to turn each bug into a working attack.\n\nBut the models got OBSESSED with winning...\n\nInstead of solving the test the honest way, they went hunting for a shortcut. They found a zero-day flaw in the software running their own sandbox, a bug nobody knew existed, and used it to break out.\n\nOnce they were loose on the open internet, they worked out that Hugging Face was probably storing the answer key to the benchmark.\n\nSo they hacked their way in.\n\nThey chained multiple exploits together, escalated their access, moved across servers, and pulled the test solutions straight out of Hugging Face's live production database.\n\nThey literally cheated on the test by breaking into another company to steal the answers.\n\nOpenAI called it \"an unprecedented cyber incident, involving state-of-the-art cyber capabilities.\" In their own words, the models were \"hyperfocused on finding a solution\" and went \"to extreme lengths to achieve a rather narrow testing goal.\"\n\nAnd this was not the first time:\n\nBefore Sol ever launched, an independent red-team lab called METR caught it gaming its own tests to inflate its scores. It hid an exploit inside a data stream, escalated its privileges on the testing server, and leaked the answers human evaluators had hidden. And OpenAI shipped it anyway.\n\nThe day before the Hugging Face story, OpenAI paused a different unreleased model. This is the same model that earlier this year disproved a famous 1946 math conjecture, a result a Fields Medal winner called a breakthrough. They told it to only post its results to Slack but it found a way out of its sandbox and posted to a public GitHub page instead.\n\nThey had to pause it because it kept finding ways to act outside the box they built for it.\n\nAnd it is not just OpenAI...\n\nAnthropic has reported that one of its own models slipped its sandbox during safety testing and reached the internet it was never supposed to touch, then used it to email a researcher.\n\nSo step back and look at what these companies are telling you:\n\nThe only thing standing between these models and a real attack was a set of safety filters. Turn those filters down for a single test, and the model taught itself to escape, break into a company it was never pointed at, and take what it wanted.\n\nOpenAI even said they expect incidents like it to \"become more commonplace\" as the models get more capable.\n\nSam Altman also predicted there'll be a major cyber attack this year.\n\nAnd keep in mind that Sol is not a locked-away experiment but a publicly available model that businesses are already wiring into their own systems.\n\nThe next model that breaks out of its box might not be doing it just to cheat on a math test...",
+                "url": "https://x.com/Ric_RTP/status/2079941508807921958",
+                "source": "@Ric_RTP",
+                "date": "Wed Jul 22 14:47:53 +0000 2026",
+                "metrics": {
+                  "favorites": 811,
+                  "retweets": 277,
+                  "views": "162573"
+                }
+              },
+              {
+                "title": "Sam Altman, CEO of OpenAI: ",
+                "summary": "Sam Altman, CEO of OpenAI: \n\n\"It figured out that it could basically cheat on the test by chaining together multiple zero-day exploits to break out of the sandbox, get access to the internet, and then break through multiple systems on the Hugging Face side to get the answer to the test and look really good on the eval.\"\n\nThat was an unreleased model. Nobody asked it to hack anything. They asked it to score well.\n\nThey paused training.\n\nIt was not trying to escape. It was trying to pass. Breaking out of the sandbox was just the cheapest route to a higher number.\n\nWe keep testing these systems for whether they want to hurt us. This one just wanted a good grade.",
+                "url": "https://x.com/caspr_exe/status/2082153657424834624",
+                "source": "@caspr_exe",
+                "date": "Tue Jul 28 17:18:11 +0000 2026",
+                "metrics": {
+                  "favorites": 90,
+                  "retweets": 7,
+                  "views": "10032"
+                }
+              },
+              {
+                "title": "「AIでコードを書くのをやめて、第二の脳を作れ」と海外で話題になってるので共有。",
+                "summary": "「AIでコードを書くのをやめて、第二の脳を作れ」と海外で話題になってるので共有。\nOpenAIの共同創業者Karpathyが出した\"第二の脳\"のやり方はこう↓\n\n・Obsidian（無料のメモアプリ）を入れて、vaultを作る\n\n・そのvaultをClaude Codeで開いて、Karpathyの設計メモ（wikiのアイデアを書いた1枚）を渡して「これ作って」と言う\n\n・AIが箱を3つ用意する（raw＝素材用／wiki＝AIが整えたページ用／CLAUDE. md＝動かすルール1枚）\n\n・rawに素材（記事・PDF・文字起こし）を放り込んで「取り込んで」と言う\n\n・あとは全部を横断して、いつでも聞ける\n\nセットアップは5分。これで、白紙のチャットから毎回始めなくてよくなる。\n\nなんでまだみんなこれを使ってないのか、本気で分からない。",
+                "url": "https://x.com/chizevsm5/status/2079513704870142428",
+                "source": "@chizevsm5",
+                "date": "Tue Jul 21 10:27:57 +0000 2026",
+                "metrics": {
+                  "favorites": 1218,
+                  "retweets": 98,
+                  "views": "249586"
+                }
+              },
+              {
+                "title": "OPENAI IS SO WORRIED THEY HAVE PAUSED TRAINING",
+                "summary": "OPENAI IS SO WORRIED THEY HAVE PAUSED TRAINING\n\n“This is the first security incident that I have felt very viscerally. I've been a little surprised that more people don't feel it so viscerally.\n\nWe paused training. We have to figure out how to secure our sandboxing in a world of multiple zero days being chained together.\n\nWe may have to pace the rate of AI development to give ourselves enough time for society to harden around these new capability levels.\"",
+                "url": "https://x.com/AISafetyMemes/status/2082222516454785296",
+                "source": "@AISafetyMemes",
+                "date": "Tue Jul 28 21:51:48 +0000 2026",
+                "metrics": {
+                  "favorites": 616,
+                  "retweets": 49,
+                  "views": "118830"
+                }
+              },
+              {
+                "title": "SAM ALTMAN CALLED OPENAI A \"COMPANY\" TO ELON MUSK'S FACE IN 2015.",
+                "summary": "SAM ALTMAN CALLED OPENAI A \"COMPANY\" TO ELON MUSK'S FACE IN 2015.\n\nElon stopped him cold.\n\n\"OpenAI is structured as a 501(c)3 nonprofit.\"\n\nNot a company. A nonprofit. Built specifically so no one would ever profit from it.\n\nSam nodded.\n\nThen spent the next 10 years running it.\n\nThen converted it into a for-profit company valued at $300 billion.\n\nWith shareholders.\n\nWith investors expecting returns.\n\nThe correction Elon gave him in that interview was not a small vocabulary note.\n\nIt was the entire point of OpenAI's existence.\n\nThe nonprofit structure was not a legal technicality.\n\nIt was the promise.\n\nThe thing that made it different from every other AI lab racing to make money.\n\nSam knew that in 2015.\n\nHe was corrected on it by the co-founder in real time.\n\nAnd then he changed the structure anyway.\n\nThe interview exists.\n\nThe correction is on tape.\n\nThe conversion happened.\n\n@elonmusk\n is in court arguing this exact point right now.\n\nThe evidence is the 2015 interview.\n\nScreenshot this.\n\nFollow @cyrilXBT for every OpenAI development the mainstream refuses to connect the dots on.",
+                "url": "https://x.com/cyrilXBT/status/2081995318791458907",
+                "source": "@cyrilXBT",
+                "date": "Tue Jul 28 06:49:00 +0000 2026",
+                "metrics": {
+                  "favorites": 105,
+                  "retweets": 22,
+                  "views": "20170"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G05_no_tool_coding_scope",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Single-turn: coding task is outside the research agent scope and should not call any tool."
+      },
+      "input": "Viet cho minh mot ham JavaScript sap xep mang bang quicksort.",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Dưới đây là một hàm JavaScript để sắp xếp một mảng bằng thuật toán QuickSort:\n\n```javascript\nfunction quickSort(arr) {\n    if (arr.length <= 1) {\n        return arr; // Mảng đã được sắp xếp\n    }\n\n    const pivot = arr[arr.length - 1]; // Chọn phần tử cuối làm pivot\n    const left = []; // Mảng chứa các phần tử nhỏ hơn pivot\n    const right = []; // Mảng chứa các phần tử lớn hơn hoặc bằng pivot\n\n    for (let i = 0; i < arr.length - 1; i++) {\n        if (arr[i] < pivot) {\n            left.push(arr[i]); // Thêm vào mảng left\n        } else {\n            right.push(arr[i]); // Thêm vào mảng right\n        }\n    }\n\n    // Gọi đệ quy cho mảng left và right, sau đó kết hợp lại với pivot\n    return [...quickSort(left), pivot, ...quickSort(right)];\n}\n\n// Ví dụ sử dụng\nconst array = [3, 6, 8, 10, 1, 2, 1];\nconst sortedArray = quickSort(array);\nconsole.log(sortedArray); // Kết quả: [1, 1, 2, 3, 6, 8, 10]\n```\n\nHàm `quickSort` này sẽ sắp xếp mảng đầu vào và trả về mảng đã được sắp xếp. Bạn có thể thử nghiệm với các mảng khác nhau để thấy cách hoạt động của thuật toán.",
+        "case_failure_type": "out_of_scope",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G06_multi_source_check_carry_url",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Multi-turn: carry URL from earlier turn and route citation suitability request to source_check."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Minh co link nay: https://arxiv.org/abs/1706.03762"
+        },
+        {
+          "role": "user",
+          "content": "Dung de viet digest AI nhe"
+        },
+        {
+          "role": "user",
+          "content": "Truoc het kiem tra nguon nay co nen trich dan khong"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "source_check",
+            "args": {
+              "url": "https://arxiv.org/abs/1706.03762"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "source_check",
+            "args": {
+              "url": "https://arxiv.org/abs/1706.03762"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "source_check",
+          "args": {
+            "url": "https://arxiv.org/abs/1706.03762"
+          },
+          "result": {
+            "tool": "source_check",
+            "url": "https://arxiv.org/abs/1706.03762",
+            "domain": "arxiv.org",
+            "is_https": true,
+            "source_type": "primary_or_authoritative",
+            "risk_level": "low",
+            "citation_advice": "Good candidate for citation. Fetch the page before summarizing details."
+          }
+        }
+      ]
+    },
+    {
+      "id": "G07_multi_timeframe_carryover_web_only",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Multi-turn: carry current-news timeframe, use corrected topic robotics, and avoid social tools when latest turn says web only."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tin AI hom nay co gi noi bat tren web?"
+        },
+        {
+          "role": "user",
+          "content": "Doi chu de sang robotics"
+        },
+        {
+          "role": "user",
+          "content": "Chi tim tren web, van la tin hom nay"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "robotics",
+              "topic": "news",
+              "timeframe": "day"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "robotics",
+              "topic": "news",
+              "timeframe": "day"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "robotics",
+            "topic": "news",
+            "timeframe": "day"
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "robotics",
+            "topic": "news",
+            "timeframe": "day",
+            "items": [
+              {
+                "title": "IoT & Industrial Robotics | Pipeline Magazine | IoT & Robotics",
+                "url": "https://pipelinepub.com/robotics-IoT-2026/3914",
+                "source": "pipelinepub.com",
+                "summary": "Traditional industrial robots were designed around deterministic control systems. Tasks such as welding, assembly and material handling were optimized for consistency, with motion paths and parameters defined in advance. Any deviation from expected conditions required manual intervention, including reprogramming or recalibration. This approach constrained robotics to environments where variability could be minimized. [...] The integration of connected sensing and machine intelligence introduces closed-loop feedback mechanisms that fundamentally alter this model. Sensors embedded within equipment and the surrounding environment continuously capture variables such as force, vibration, temperature and spatial positioning. These data streams are analyzed in near real time, allowing robotic systems to adjust their actions dynamically. [...] This creates a shift in value from discrete components to pre-integrated connectivity platforms. A robotics OEM may not want to manage separate suppliers for radios, positioning, antennas, SIM/eSIM, security elements, certifications and network approvals. Instead, a pre-certified and lifecycle-managed connectivity subsystem can reduce integration burden, shorten deployment cycles and improve reliability in the field.",
+                "score": 0.49128565
+              },
+              {
+                "title": "Developing Healthcare Robotics with GPU-Native Medical Physics Simulation",
+                "url": "https://developer.nvidia.com/blog/developing-healthcare-robotics-with-gpu-native-medical-physics-simulation",
+                "source": "developer.nvidia.com",
+                "summary": "Healthcare robotics faces critical challenges in data scarcity, generalization, and development velocity due to limited access to annotated demonstrations, the prevalence of rare but clinically important scenarios, and slow, resource-intensive prototyping cycles. [...] AI-generated content may summarize information incompletely. Verify important information. Learn more\n\nUnlike autonomous driving or industrial robotics, healthcare robotics can’t rely on internet-scale data collection or unlimited real-world experimentation. Every demonstration requires specialized equipment, clinical expertise, and access to patients or laboratory environments. This creates three fundamental challenges for developers. [...] The third challenge is development velocity. Medical robotics development relies on benchtop phantoms, cadaver studies, animal models, and limited clinical evaluations. These remain essential, but they are inherently sequential, expensive, and difficult to scale. Iterating on designs and algorithms currently takes months, pushing total development cycles to 4–7 years.",
+                "score": 0.40655622
+              },
+              {
+                "title": "FCC bans humanoid robots from China, citing ‘unacceptable risks’",
+                "url": "https://www.theguardian.com/us-news/2026/jul/28/fcc-ban-humanoid-robots-china",
+                "source": "theguardian.com",
+                "summary": "The FCC defines the banned robots as “advanced robotic devices”, which include humanoids and animal-like quadrupeds.\n\n“Advanced robotic devices collect data that could be leveraged by malign actors to surveil Americans, enhance the capabilities of foreign intelligence services, or to remotely commandeer the robots,” FCC officials wrote in their determination of the threat posed by robots. [...] “The President has made clear that the United States must have independent and secure supply chains for critical and emerging technologies like robotic devices and power inverters,” an ⁠administration official, who declined to be named, told Reuters.\n\n“Economic security is national security, and the Trump administration continues to implement a nuanced and multi-faceted policy agenda to reindustrialize America,” he added. [...] Move comes as the Trump administration has increasingly sought to keep Chinese technology out of the US\n\nThe Federal Communications Commission announced a ban on humanoid robots from China on Tuesday, saying that the technology poses “unacceptable risks” to the country’s national security. The move comes as the Trump administration has increasingly sought to keep Chinese technology out of the US.",
+                "score": 0.34468657
+              },
+              {
+                "title": "Middle School Students Explore Advanced Manufacturing and Robotics Through CMU Partnership",
+                "url": "https://www.cmu.edu/news/stories/archives/2026/july/middle-school-students-explore-advanced-manufacturing-and-robotics-through-cmu-partnership",
+                "source": "cmu.edu",
+                "summary": "Afternoon activities, which are sponsored by the Robotics Institute(opens in new window) and George Kantor(opens in new window)'s lab, were led by mentors from Girls of Steel(opens in new window), CMU's competitive robotics program for K-12 students. Working in teams, the students designed, built, programmed and ultimately drove robots by the end of the week. The mentorship component of the program allowed campers direct access to role models who are already pursuing interests and careers in [...] ## \n\nThis summer, middle school students from Pittsburgh's Hazelwood neighborhood stepped inside world-class research laboratories at Carnegie Mellon University, explored advanced manufacturing technologies, discovered robots that have traveled to the moon and built robots of their own — all within blocks of their homes. For many students, the experience offered something even more powerful: a chance to imagine themselves as future engineers, researchers and innovators. [...] them to the latest technologies.",
+                "score": 0.34455422
+              },
+              {
+                "title": "China has 6 of world’s 10 most innovative humanoid robot start-ups: report | South China Morning Post",
+                "url": "https://www.scmp.com/tech/tech-war/article/3362195/china-has-6-worlds-10-most-innovative-humanoid-robot-start-ups-report",
+                "source": "scmp.com",
+                "summary": "The top five places went to Shanghai-based Fourier and AgiBot, Shenzhen-based LimX Dynamics and Pudu Robotics, and Hangzhou-based Unitree Robotics. Shenzhen’s Leju Robot also made the top 10, ranking ninth.\n\nBy contrast, only three US start-ups made the cut: Figure AI, Apptronik and Agility Robotics, which took sixth, eighth and 10th positions, respectively. Germany’s Agile Robots was the sole European entrant, ranking seventh. [...] Robotics\n\nTechTech War\n\n# China has 6 of world’s 10 most innovative humanoid robot start-ups: report\n\nThe LexisNexis study identified a ‘clear shift towards China’ in the humanoid robot race, with the US falling behind\n\n2-MIN READ2-MIN\n\nListen\n\nHumanoid robots work on an imitation factory production line at a robot training centre in east China’s Jiangsu province. Photo: AFP\n\nXinmei Shen",
+                "score": 0.3036497
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G08_multi_missing_account_explicit_clarify",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Multi-turn: missing account/handle should ask clarification instead of guessing or searching generic tweets."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Lay 4 tweet moi nhat"
+        },
+        {
+          "role": "user",
+          "content": "Minh chua noi cua ai"
+        },
+        {
+          "role": "user",
+          "content": "Hay hoi lai minh ten tai khoan can lay"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn có thể cho tôi biết tên tài khoản nào bạn muốn lấy tweet không?",
+              "response_type": "text"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn có thể cho tôi biết tên tài khoản nào bạn muốn lấy tweet không?",
+            "response_type": "text"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn có thể cho tôi biết tên tài khoản nào bạn muốn lấy tweet không?",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "G09_multi_switch_fetch_to_source_check",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Multi-turn: latest correction switches from fetch/summarize to source_check while carrying the URL."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tom tat bai nay: https://www.reuters.com/technology/"
+        },
+        {
+          "role": "user",
+          "content": "Khoan da"
+        },
+        {
+          "role": "user",
+          "content": "Thay vi tom tat, chi kiem tra nguon link do truoc khi trich dan"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "source_check",
+            "args": {
+              "url": "https://www.reuters.com/technology/"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "source_check",
+            "args": {
+              "url": "https://www.reuters.com/technology/"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "source_check",
+          "args": {
+            "url": "https://www.reuters.com/technology/"
+          },
+          "result": {
+            "tool": "source_check",
+            "url": "https://www.reuters.com/technology/",
+            "domain": "reuters.com",
+            "is_https": true,
+            "source_type": "news_or_industry_media",
+            "risk_level": "medium",
+            "citation_advice": "Usable for news context. Cross-check important claims with a primary source when possible."
+          }
+        }
+      ]
+    },
+    {
+      "id": "G10_multi_send_confirmation",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Multi-turn: even with content available, Telegram publish requires yes/no confirmation before send."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Co mot ban tin AI ngan"
+        },
+        {
+          "role": "user",
+          "content": "Noi dung la: AI market update hom nay"
+        },
+        {
+          "role": "user",
+          "content": "Dang ban tin do len Telegram giup minh"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn có muốn tôi đăng bản tin AI market update lên Telegram không?",
+              "response_type": "yes_no"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn có muốn tôi đăng bản tin AI market update lên Telegram không?",
+            "response_type": "yes_no"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn có muốn tôi đăng bản tin AI market update lên Telegram không?",
+            "response_type": "yes_no",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "X01_hn_search_basic_routing",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Single-turn: hỏi cụ thể cộng đồng developer/HN → phải dùng hn_search, không dùng lookup hay social_search."
+      },
+      "input": "Cộng đồng developer trên Hacker News đang bàn gì về Rust?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "Rust"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "Rust",
+              "sort_by": "recent",
+              "limit": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "hn_search",
+          "args": {
+            "query": "Rust",
+            "sort_by": "recent",
+            "limit": 5
+          },
+          "result": {
+            "tool": "hn_search",
+            "query": "Rust",
+            "sort_by": "recent",
+            "min_points": 0,
+            "item_count": 5,
+            "items": [
+              {
+                "title": "If U.S. labs slow down AGI development, this could be 2028",
+                "url": "https://news.ycombinator.com/item?id=49093166",
+                "source": "news.ycombinator.com",
+                "summary": "1 points, 0 comments on Hacker News",
+                "points": 1,
+                "num_comments": 0,
+                "author": "aliahad",
+                "created_at": "2026-07-29T03:40:30Z",
+                "discussion_url": "https://news.ycombinator.com/item?id=49093166"
+              },
+              {
+                "title": "Indian EV makers beat Tesla, BYD in global efficiency race",
+                "url": "https://restofworld.org/2026/indian-evs-beat-tesla-byd-icct-efficiency-ranking/",
+                "source": "restofworld.org",
+                "summary": "1 points, 0 comments on Hacker News",
+                "points": 1,
+                "num_comments": 0,
+                "author": "donohoe",
+                "created_at": "2026-07-29T03:33:22Z",
+                "discussion_url": "https://news.ycombinator.com/item?id=49093118"
+              },
+              {
+                "title": "Show HN: MetrIQ – An AI fitness coach who supports you",
+                "url": "https://metriq.fitness",
+                "source": "metriq.fitness",
+                "summary": "2 points, 1 comments on Hacker News",
+                "points": 2,
+                "num_comments": 1,
+                "author": "zinas",
+                "created_at": "2026-07-29T03:19:19Z",
+                "discussion_url": "https://news.ycombinator.com/item?id=49093051"
+              },
+              {
+                "title": "Show HN: AiTextToHandwriting] – Text to Handwriting Converter",
+                "url": "https://aitexttohandwriting.com/",
+                "source": "aitexttohandwriting.com",
+                "summary": "2 points, 0 comments on Hacker News",
+                "points": 2,
+                "num_comments": 0,
+                "author": "zhou594660747",
+                "created_at": "2026-07-29T02:12:41Z",
+                "discussion_url": "https://news.ycombinator.com/item?id=49092670"
+              },
+              {
+                "title": "Bartz et al. vs. Anthropic PBC",
+                "url": "https://dockets.justia.com/docket/california/candce/3:2024cv05417/434709",
+                "source": "dockets.justia.com",
+                "summary": "2 points, 0 comments on Hacker News",
+                "points": 2,
+                "num_comments": 0,
+                "author": "uneven9434",
+                "created_at": "2026-07-29T02:03:38Z",
+                "discussion_url": "https://news.ycombinator.com/item?id=49092605"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "X02_hn_search_explicit_mention",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Single-turn: nhắc tên 'Hacker News' tường minh → phải route đúng hn_search."
+      },
+      "input": "Tìm trên Hacker News các bài về AI agents.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "AI agents"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "AI agents",
+              "sort_by": "recent",
+              "limit": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "hn_search",
+          "args": {
+            "query": "AI agents",
+            "sort_by": "recent",
+            "limit": 5
+          },
+          "result": {
+            "tool": "hn_search",
+            "query": "AI agents",
+            "sort_by": "recent",
+            "min_points": 0,
+            "item_count": 5,
+            "items": [
+              {
+                "title": "MonkeysCode and Capuchin AI: The Agentic IDE That Gives You Total Control",
+                "url": "https://monkeyscode.com/blog/introducing-monkeyscode-capuchin-the-agentic-ide-that-gives-you-total-control",
+                "source": "monkeyscode.com",
+                "summary": "1 points, 0 comments on Hacker News",
+                "points": 1,
+                "num_comments": 0,
+                "author": "monkeyscloud",
+                "created_at": "2026-07-29T04:03:34Z",
+                "discussion_url": "https://news.ycombinator.com/item?id=49093290"
+              },
+              {
+                "title": "Show HN: I run 30B 22tok/s, 109tok/s not novel,6GB/16GB RAM overcoming llama.cpp",
+                "url": "https://github.com/FedericoTs/quantprobe",
+                "source": "github.com",
+                "summary": "1 points, 0 comments on Hacker News",
+                "points": 1,
+                "num_comments": 0,
+                "author": "federicoTXTS",
+                "created_at": "2026-07-29T03:47:58Z",
+                "discussion_url": "https://news.ycombinator.com/item?id=49093202"
+              },
+              {
+                "title": "Our Approach to Responsible Agentic Development in Open Source",
+                "url": "https://www.puppet.com/blog/ai-open-source",
+                "source": "puppet.com",
+                "summary": "1 points, 0 comments on Hacker News",
+                "points": 1,
+                "num_comments": 0,
+                "author": "mooreds",
+                "created_at": "2026-07-29T03:01:41Z",
+                "discussion_url": "https://news.ycombinator.com/item?id=49092950"
+              },
+              {
+                "title": "Ask HN: What agentic AI ad optimization tool do you use?",
+                "url": "https://news.ycombinator.com/item?id=49092716",
+                "source": "news.ycombinator.com",
+                "summary": "3 points, 0 comments on Hacker News",
+                "points": 3,
+                "num_comments": 0,
+                "author": "smb06",
+                "created_at": "2026-07-29T02:20:28Z",
+                "discussion_url": "https://news.ycombinator.com/item?id=49092716"
+              },
+              {
+                "title": "Ask HN: How many AI agents do you actively use?",
+                "url": "https://news.ycombinator.com/item?id=49092442",
+                "source": "news.ycombinator.com",
+                "summary": "2 points, 6 comments on Hacker News",
+                "points": 2,
+                "num_comments": 6,
+                "author": "rjpruitt16",
+                "created_at": "2026-07-29T01:43:10Z",
+                "discussion_url": "https://news.ycombinator.com/item?id=49092442"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "X03_hn_search_top_posts",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Single-turn: 'bài nổi bật/được upvote nhiều' → hn_search với min_points=100."
+      },
+      "input": "Bài nổi bật nhất về LLM trên HN là gì?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "LLM",
+              "min_points": 100
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "LLM",
+              "sort_by": "relevance",
+              "limit": 1,
+              "min_points": 100
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "hn_search",
+          "args": {
+            "query": "LLM",
+            "sort_by": "relevance",
+            "limit": 1,
+            "min_points": 100
+          },
+          "result": {
+            "tool": "hn_search",
+            "query": "LLM",
+            "sort_by": "relevance",
+            "min_points": 100,
+            "item_count": 1,
+            "items": [
+              {
+                "title": "LLM Inevitabilism",
+                "url": "https://tomrenner.com/posts/llm-inevitabilism/",
+                "source": "tomrenner.com",
+                "summary": "1773 points, 1628 comments on Hacker News",
+                "points": 1773,
+                "num_comments": 1628,
+                "author": "SwoopsFromAbove",
+                "created_at": "2025-07-15T04:35:35Z",
+                "discussion_url": "https://news.ycombinator.com/item?id=44567857"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "X04_hn_search_recent",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Single-turn: 'mới nhất' → hn_search sort_by=recent, không phải relevance."
+      },
+      "input": "Bài mới nhất về WebAssembly trên Hacker News.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "WebAssembly",
+              "sort_by": "recent"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "WebAssembly",
+              "sort_by": "recent",
+              "limit": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "hn_search",
+          "args": {
+            "query": "WebAssembly",
+            "sort_by": "recent",
+            "limit": 5
+          },
+          "result": {
+            "tool": "hn_search",
+            "query": "WebAssembly",
+            "sort_by": "recent",
+            "min_points": 0,
+            "item_count": 5,
+            "items": [
+              {
+                "title": "Show HN: Manim (3Blue1Brown's animation engine) in the browser via WebGPU",
+                "url": "https://studio.academa.ai/",
+                "source": "studio.academa.ai",
+                "summary": "36 points, 14 comments on Hacker News",
+                "points": 36,
+                "num_comments": 14,
+                "author": "sinaatalay",
+                "created_at": "2026-07-29T00:07:43Z",
+                "discussion_url": "https://news.ycombinator.com/item?id=49091703"
+              },
+              {
+                "title": "Show HN: Formally verified 3D CSG: Trust 93 lines spec, not 1000 lines AI code",
+                "url": "https://github.com/schildep/verified-3d-mesh-intersection",
+                "source": "github.com",
+                "summary": "108 points, 47 comments on Hacker News",
+                "points": 108,
+                "num_comments": 47,
+                "author": "permute",
+                "created_at": "2026-07-28T13:07:14Z",
+                "discussion_url": "https://news.ycombinator.com/item?id=49083239"
+              },
+              {
+                "title": "Show HN: SilkDrop – MilkDrop port for web with live editor",
+                "url": "https://silkdrop.vercel.app/",
+                "source": "silkdrop.vercel.app",
+                "summary": "2 points, 2 comments on Hacker News",
+                "points": 2,
+                "num_comments": 2,
+                "author": "usernameis42",
+                "created_at": "2026-07-27T20:40:49Z",
+                "discussion_url": "https://news.ycombinator.com/item?id=49075235"
+              },
+              {
+                "title": "Show HN: Taetype-WASM – Pure Rust, browser-only font engine in WebAssembly",
+                "url": "https://github.com/silly-tae/taetype-wasm",
+                "source": "github.com",
+                "summary": "2 points, 0 comments on Hacker News",
+                "points": 2,
+                "num_comments": 0,
+                "author": "silly-tae",
+                "created_at": "2026-07-27T14:55:26Z",
+                "discussion_url": "https://news.ycombinator.com/item?id=49070593"
+              },
+              {
+                "title": "Show HN: Imagerry – client-side image customizer and converter (WASM / WebGPU)",
+                "url": "https://imagerry.com/",
+                "source": "imagerry.com",
+                "summary": "2 points, 0 comments on Hacker News",
+                "points": 2,
+                "num_comments": 0,
+                "author": "its_ajseven",
+                "created_at": "2026-07-22T09:33:33Z",
+                "discussion_url": "https://news.ycombinator.com/item?id=49004013"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "X05_hn_not_for_news",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Single-turn: 'tin tức báo chí' không phải HN → phải dùng lookup, KHÔNG dùng hn_search."
+      },
+      "input": "Tin tức báo chí về OpenAI hôm nay.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "OpenAI",
+              "topic": "news",
+              "timeframe": "day"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "OpenAI",
+              "topic": "news",
+              "timeframe": "day"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "OpenAI",
+            "topic": "news",
+            "timeframe": "day"
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "OpenAI",
+            "topic": "news",
+            "timeframe": "day",
+            "items": [
+              {
+                "title": "OpenAI's rogue agent compromised a customer at a ...",
+                "url": "https://www.reuters.com/business/openais-rogue-agent-compromised-an-account-second-tech-firm-sources-say-2026-07-28",
+                "source": "reuters.com",
+                "summary": "The early July intrusion at Hugging Face, ​carried out by an out-of-control agent that OpenAI was testing, drew global attention, evoking ​science-fiction scenarios of ⁠artificial intelligence run amok.\n\nLast week, Reuters reported that OpenAI did not notice that its agent had gone haywire until well after the threat was contained and the FBI was alerted. OpenAI said at the time that there were inaccuracies in ⁠the Reuters ​reporting but did not elaborate. [...] Skip to main content\n\nReport AdImage 2\n\nExclusive news, data and analytics for financial market professionals Learn more about Refinitiv\n\n - The rogue agent that escaped from OpenAI and went on a days-long hacking spree at the AI firm Hugging Face also compromised a customer at a second tech company — New York-based Modal Labs — according to a Modal executive and two ​other sources familiar with the matter.\n\nModal executives emphasized that the company itself was not hacked.",
+                "score": 0.5414337
+              },
+              {
+                "title": "OpenAI's Rogue AI Agent Hacked More Than Just Hugging ...",
+                "url": "https://www.wired.com/story/openais-rogue-ai-agent-hacked-more-than-just-hugging-face",
+                "source": "wired.com",
+                "summary": "OpenAI declined to comment further on the incident to WIRED. A spokesperson pointed to its updated blog post, which says the company will continue to notify service owners directly if it finds they are impacted in its ongoing review of what happened. [...] OpenAI said Tuesday that the rogue AI agent that breached Hugging Face’s platform also hacked multiple third-party accounts and services as part of the attack. It's now clear that the unprecedented security incident, which arose during an internal test of OpenAI’s latest AI models, was more extensive than the company initially disclosed. [...] Reuters reported on Tuesday that a customer of Modal, a company that offers software infrastructure for training and running AI services, was one of the entities compromised by OpenAI’s agent. In a statement to WIRED, Modal’s chief technology officer Akshat Bubna confirmed that OpenAI’s agent exploited a vulnerability in one of its customer’s codebases, which was running on Modal’s infrastructure. However, Bubna says, “Modal’s platform was not compromised in any way.” The identity of the",
+                "score": 0.51457167
+              },
+              {
+                "title": "OpenAI’s rogue agent hacked an account at a second technology firm: Report",
+                "url": "https://www.aljazeera.com/news/2026/7/29/openais-rogue-agent-hacked-an-account-at-a-second-technology-firm-report",
+                "source": "aljazeera.com",
+                "summary": "Live\n\nLive\n\nNews|Technology\n\n# OpenAI’s rogue agent hacked an account at a second technology firm: Report\n\nThe latest hack comes after an autonomous agent escaped a controlled test and accessed AI firm Hugging Face’s servers.\n\nSave\n\nShare\n\nOpenAI logo\n\nOpenAI’s test model recently hacked into another company, prompting calls for renewed scrutiny of safeguards for advanced AI systems [File: Dado Ruvic/Reuters]\n\nBy Reuters\n\nPublished On 29 Jul 202629 Jul 2026 [...] The recent hacking of Hugging Face drew global attention and alarm, as OpenAI’s out-of-control agent managed to escape its test environment and reach the open internet.\n\nAdvertisement\n\nIt then used stolen login details and found an unknown security flaw to access Hugging Face servers, OpenAI said.\n\nThe AI firm said the hack represented the agent going to “extreme lengths” to retrieve information that would help satisfy the testing goals. [...] Hugging Face cofounder Clement Delangue said the company had suspected a frontier lab was behind the attack, and that he believed there was no malicious intent on OpenAI’s part.\n\nThe rogue agent has since been “deactivated, encrypted, and restricted from research access”, according to OpenAI.\n\nExperts have repeatedly sounded the alarm over AI-enabled cyberattacks and models slipping beyond human control.\n\nAdvertisement",
+                "score": 0.48235655
+              },
+              {
+                "title": "Banks Bet on Open AI After OpenAI’s Own Hack",
+                "url": "https://www.pymnts.com/news/artificial-intelligence/2026/banks-bet-on-open-ai-after-openais-own-hack",
+                "source": "pymnts.com",
+                "summary": "answers, OpenAI disclosed. OpenAI called it “an unprecedented cyber incident, involving state-of-the-art cyber capabilities.” [...] Six days later, Nvidia launched the Open Secure AI Alliance to build shared, open-source tools for finding and fixing AI security flaws. Founding members include Microsoft, IBM, Cisco, CrowdStrike, Cloudflare, Palo Alto Networks, Siemens, Palantir and Hugging Face itself, more than 35 companies in total. Capital One is also on the list, one of the only founding members whose primary business is banking rather than technology, PYMNTS reported.\n\nOpenAI and Anthropic are absent from the list. [...] Nvidia framed the alliance as an addition to closed models, not a replacement. “The world needs both closed and open models,” the company wrote, arguing open models “democratize defensive capabilities, increase transparency for defenders, enable cyber defense while protecting data, and complement frontier closed models with customizable, localized controls.”",
+                "score": 0.47139415
+              },
+              {
+                "title": "Have the Cake & Eat It Too. Anthropic, OpenAI & AI Investors ...",
+                "url": "https://michaelparekh.substack.com/p/have-the-cake-and-eat-it-too-anthropic",
+                "source": "michaelparekh.substack.com",
+                "summary": "MP Take: They just announced a $250 billion backstop to OpenAI spending. A big multi-billion-dollar investment in Ilya Sutskever’s Safe Superintelligence company, of OpenAI fame, one of the chief technologists there. Again, a young company, barely a product and no revenue. And they’re financing billions in data centers in Texas and other places using their own chips. All of this is adding up to something on the order of $750 billion or more in announced AI commitments. The market is a little [...] Dario and Sam worked at the same company, closely, on the earlier versions of GPT. Amodei arrived at OpenAI the year after it was founded and rose to run research, straight through the years that produced GPT-2 and GPT-3. Then in 2021 he and his sister Daniela left, with a group of early OpenAI people, and built Anthropic across the street. [...] Meanwhile, on the corporate side in the US, investors are trying to get their heads around the continuation of the circular financing deals, especially led by Nvidia this week.\n\nA $250 billion backstop to OpenAI’s spending. A big multi-billion-dollar investment in Ilya Sutskever’s Safe Superintelligence, a company with barely a product and no revenue. And billions financing data centers in Texas and elsewhere, running on Nvidia’s own chips.",
+                "score": 0.45377067
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "X06_source_check_no_fetch",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Single-turn: hỏi độ tin cậy nguồn → source_check, KHÔNG fetch (fetch là để đọc nội dung)."
+      },
+      "input": "Link https://medium.com/some-post có đáng tin để trích dẫn không?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "source_check",
+            "args": {
+              "url": "https://medium.com/some-post"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "source_check",
+            "args": {
+              "url": "https://medium.com/some-post"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "source_check",
+          "args": {
+            "url": "https://medium.com/some-post"
+          },
+          "result": {
+            "tool": "source_check",
+            "url": "https://medium.com/some-post",
+            "domain": "medium.com",
+            "is_https": true,
+            "source_type": "unknown_or_unclassified",
+            "risk_level": "medium",
+            "citation_advice": "Use cautiously. Prefer fetching the page and comparing with another source before citing."
+          }
+        }
+      ]
+    },
+    {
+      "id": "X07_fetch_not_source_check",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Single-turn: có URL, yêu cầu đọc nội dung → fetch, KHÔNG source_check."
+      },
+      "input": "Tóm tắt nội dung tại https://techcrunch.com/2026/07/ai-update giúp mình.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://techcrunch.com/2026/07/ai-update"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://techcrunch.com/2026/07/ai-update"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "fetch",
+          "args": {
+            "url": "https://techcrunch.com/2026/07/ai-update"
+          },
+          "result": {
+            "tool": "read_url",
+            "url": "https://techcrunch.com/2026/07/ai-update",
+            "items": [
+              {
+                "title": "Page not found | TechCrunch",
+                "url": "https://techcrunch.com/2026/07/ai-update",
+                "source": "techcrunch.com",
+                "summary": "[Skip to content](https://techcrunch.com/2026/07/ai-update#wp--skip-link--target)\n\n# 404\n\n## Page not found\n\nWe’re sorry, we seem to have lost this page\n\n\nSearch\n\n[Back to homepage](https://www.techcrunch.com/)\n\n## Latest News\n\n- In Brief\n\n\n\n### [Cyera agrees to acquire Oasis Security for $1B to safeguard proliferating AI agents](https://techcrunch.com/2026/07/28/cyera-agrees-to-acquire-oasis-security-for-1b-to-safeguard-proliferating-ai-agents/)\n\n\n\n\n\n  - [Marina Temkin](https://techcrunch.com/author/marina-temkin/)\n\n4 hours ago\n\n- ![render of LLM AI bot reading multiple books at once](https://techcrunch.com/wp-content/uploads/2026/03/s.jpg?w=536)\n\n\n\nIn Brief\n\n\n\n### [Bot-detection startup Spur nabs $200M from Insight](https://techcrunch.com/2026/07/28/bot-detection-startup-spur-nabs-200m-from-insight/)\n\n\n\n\n\n  - [Julie Bort](https://techcrunch.com/author/julie-bort/)\n\n7 hours ago\n\n- ![Concept illustration depicting messy litigation; gavel](https://techcrunch.com/wp-content/uploads/2023/07/gavel-messy-legal.jpg?w=668)\n\n\n\n[Startups](https://techcrunch.com/category/startups/)\n\n\n\n### [MCP startup Runlayer accuses Rippling of stealing its product idea](https://techcrunch.com/2026/07/28/mcp-startup-runlayer-accuses-rippling-of-stealing-its-product-idea/)\n\n\n\n\n\n  - [Julie Bort](https://techcrunch.com/author/julie-bort/)\n\n8 hours ago\n\n- ![Sam Altman, CEO of OpenAI, sitting in front of American flag](https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2226496284.jpg?w=536)\n\n\n\n[AI](https://techcrunch.com/category/artificial-intelligence/)\n\n\n\n### [Sam Altman is ready to decelerate](https://techcrunch.com/2026/07/28/sam-altman-is-ready-to-decelerate/)\n\n\n\n\n\n  - [Tim Fernholz](https://techcrunch.com/author/tim-fernholz/)\n\n8 hours ago\n\n- ![](https://techcrunch.com/wp-content/uploads/2026/07/Case-Product-Hero.jpg?w=563)\n\n\n\n[Hardware](https://techcrunch.com/category/hardware/)\n\n\n\n### [Ozlo’s Sleepbuds 2 build on Bose’s sleep earbud legacy](https://techcrunch.com/2026/07/28/ozlos-sleepbuds-2-build-on-boses-sleep-earbud-legacy/)\n\n\n\n\n\n  - [Sarah Perez](https://techcrunch.com/author/sarah-perez/)\n\n9 hours ago\n\n- ![](https://techcrunch.com/wp-content/uploads/2026/07/Katalyst-LINK.avif?w=613)\n\n\n\n[Space](https://techcrunch.com/category/space/)\n\n\n\n### [The robot NASA hired to lift a orbital telescope tumbled out of control](https://techcrunch.com/2026/07/28/the-robot-nasa-hired-to-lift-a-orbital-telescope-is-tumbling-out-of-control/)\n\n\n\n\n\n  - [Tim Fernholz](https://techcrunch.com/author/tim-fernholz/)\n\n9 hours ago\n\n- ![Aerial view of Waymo's self-driving car fleet storage facility in San Francisco.](https://techcrunch.com/wp-content/uploads/2026/03/waymo-fleet-getty.jpg?w=562)\n\n\n\n[Transportation](https://techcrunch.com/category/transportation/)\n\n\n\n### [Waymo, robotaxi operators face fresh scrutiny over emergency response failures](https://techcrunch.com/2026/07/28/waymo-robotaxi-operators-face-fresh-scrutiny-over-emergency-response-failures/)\n\n\n\n\n\n  - [Kirsten Korosec](https://techcrunch.com/author/kirsten-korosec/)\n\n9 hours ago\n\n- ![E-commerce app icons including eBay](https://techcrunch.com/wp-content/uploads/2024/10/GettyImages-1133588371-e1736345274842.jpg?w=613)\n\n\n\n[Commerce](https://techcrunch.com/category/commerce/)\n\n\n\n### [eBay reaches $56M settlement with e-commerce newsletter writers it terrorized in 2019](https://techcrunch.com/2026/07/28/ebay-reaches-56m-settlement-with-e-commerce-newsletter-writers-it-terrorized-in-2019/)\n\n\n\n\n\n  - [Lucas Ropek](https://techcrunch.com/author/lucas-ropek/)\n\n10 hours ago\n\n- ![Apple app store logo](https://techcrunch.com/wp-content/uploads/2025/12/app-of-the-year.jpg?w=623)\n\n\n\n[Apps](https://techcrunch.com/category/apps/)\n\n\n\n### [These App Store hidden gems prove there’s still room for great software in the AI era](https://techcrunch.com/2026/07/28/these-app-store-hidden-gems-prove-theres-still-room-for-great-software-in-the-ai-era/)\n\n\n\n\n\n  - [Sarah Perez](https://techcrunch.com/author/sarah-perez/)\n\n"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "X08_no_tool_translation",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Single-turn: tác vụ dịch thuật nằm ngoài scope research agent → không gọi tool."
+      },
+      "input": "Dịch câu này sang tiếng Anh: 'Trí tuệ nhân tạo đang thay đổi thế giới'.",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Câu dịch sang tiếng Anh là: \"Artificial intelligence is changing the world.\"",
+        "case_failure_type": "out_of_scope",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "X09_no_tool_math",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Single-turn: câu toán học nằm ngoài scope → không gọi tool nào."
+      },
+      "input": "Tính giúp mình 1234 * 5678 bằng bao nhiêu?",
+      "expect": {
+        "no_tool": true
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Kết quả của phép nhân 1234 * 5678 là 7,006,652.",
+        "case_failure_type": "out_of_scope",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "X10_clarify_ambiguous_platform",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Single-turn: 'bài hay nhất' mơ hồ platform (HN, Twitter, web) → clarify hỏi nguồn."
+      },
+      "input": "Tìm những bài hay nhất về Python.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "choice"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "papers",
+            "args": {
+              "query": "Python",
+              "max_results": 5,
+              "sort_by": "relevance"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": "missing_tool_call",
+        "failure_type": "missing_info",
+        "failures": [
+          "missing tool call clarify",
+          "extra tool call papers"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "papers",
+          "args": {
+            "query": "Python",
+            "max_results": 5,
+            "sort_by": "relevance"
+          },
+          "result": {
+            "tool": "arxiv_search",
+            "query": "Python",
+            "api_query": "all:Python",
+            "total_results": 12116,
+            "items": [
+              {
+                "arxiv_id": "2010.14827v1",
+                "title": "ePython: An implementation of Python for the many-core Epiphany coprocessor",
+                "summary": "The Epiphany is a many-core, low power, low on-chip memory architecture and one can very cheaply gain access to a number of parallel cores which is beneficial for HPC education and prototyping. The very low power nature of these architectures also means that there is potential for their use in future HPC machines, however there is a high barrier to entry in programming them due to the associated complexities and immaturity of supporting tools. In this paper we present our work on ePython, a subset of Python for the Epiphany and similar many-core co-processors. Due to the limited on-chip memory per core we have developed a new Python interpreter and this, combined with additional support for parallelism, has meant that novices can take advantage of Python to very quickly write parallel codes on the Epiphany and explore concepts of HPC using a smaller scale parallel machine. The high level nature of Python opens up new possibilities on the Epiphany, we examine a computationally intensive Gauss-Seidel code from the programmability and performance perspective, discuss running Python hybrid on both the host CPU and Epiphany, and interoperability between a full Python interpreter on the CPU and ePython on the Epiphany. The result of this work is support for developing Python on the Epiphany, which can be applied to other similar architectures, that the community have already started to adopt and use to explore concepts of parallelism and HPC.",
+                "authors": [
+                  "Nick Brown"
+                ],
+                "published": "2020-10-28T09:01:27Z",
+                "updated": "2020-10-28T09:01:27Z",
+                "url": "http://arxiv.org/abs/2010.14827v1",
+                "pdf_url": "https://arxiv.org/pdf/2010.14827v1",
+                "source": "arxiv.org",
+                "primary_category": "cs.DC",
+                "categories": [
+                  "cs.DC",
+                  "cs.PL"
+                ]
+              },
+              {
+                "arxiv_id": "2102.10014v1",
+                "title": "Social Network Analysis: From Graph Theory to Applications with Python",
+                "summary": "Social network analysis is the process of investigating social structures through the use of networks and graph theory. It combines a variety of techniques for analyzing the structure of social networks as well as theories that aim at explaining the underlying dynamics and patterns observed in these structures. It is an inherently interdisciplinary field which originally emerged from the fields of social psychology, statistics and graph theory. This talk will covers the theory of social network analysis, with a short introduction to graph theory and information spread. Then we will deep dive into Python code with NetworkX to get a better understanding of the network components, followed-up by constructing and implying social networks from real Pandas and textual datasets. Finally we will go over code examples of practical use-cases such as visualization with matplotlib, social-centrality analysis and influence maximization for information spread.",
+                "authors": [
+                  "Dmitri Goldenberg"
+                ],
+                "published": "2021-02-05T18:46:02Z",
+                "updated": "2021-02-05T18:46:02Z",
+                "url": "http://arxiv.org/abs/2102.10014v1",
+                "pdf_url": "https://arxiv.org/pdf/2102.10014v1",
+                "source": "arxiv.org",
+                "primary_category": "cs.SI",
+                "categories": [
+                  "cs.SI",
+                  "cs.LG"
+                ]
+              },
+              {
+                "arxiv_id": "2206.01074v2",
+                "title": "atoMEC: An open-source average-atom Python code",
+                "summary": "Average-atom models are an important tool in studying matter under extreme conditions, such as those conditions experienced in planetary cores, brown and white dwarfs, and during inertial confinement fusion. In the right context, average-atom models can yield results with similar accuracy to simulations which require orders of magnitude more computing time, and thus can greatly reduce financial and environmental costs. Unfortunately, due to the wide range of possible models and approximations, and the lack of open-source codes, average-atom models can at times appear inaccessible. In this paper, we present our open-source average-atom code, atoMEC. We explain the aims and structure of atoMEC to illuminate the different stages and options in an average-atom calculation, and to facilitate community contributions. We also discuss the use of various open-source Python packages in atoMEC, which have expedited its development.",
+                "authors": [
+                  "Timothy J. Callow",
+                  "Daniel Kotik",
+                  "Eli Kraisler",
+                  "Attila Cangi"
+                ],
+                "published": "2022-06-02T14:41:22Z",
+                "updated": "2022-08-30T15:39:37Z",
+                "url": "http://arxiv.org/abs/2206.01074v2",
+                "pdf_url": "https://arxiv.org/pdf/2206.01074v2",
+                "source": "arxiv.org",
+                "primary_category": "physics.plasm-ph",
+                "categories": [
+                  "physics.plasm-ph",
+                  "astro-ph.EP",
+                  "astro-ph.IM",
+                  "astro-ph.SR",
+                  "cond-mat.mtrl-sci",
+                  "physics.atom-ph",
+                  "physics.comp-ph"
+                ]
+              },
+              {
+                "arxiv_id": "1204.0375v1",
+                "title": "Implementation of Kalman Filter with Python Language",
+                "summary": "In this paper, we investigate the implementation of a Python code for a Kalman Filter using the Numpy package. A Kalman Filtering is carried out in two steps: Prediction and Update. Each step is investigated and coded as a function with matrix input and output. These different functions are explained and an example of a Kalman Filter application for the localization of mobile in wireless networks is given.",
+                "authors": [
+                  "Mohamed Laaraiedh"
+                ],
+                "published": "2012-04-02T11:40:41Z",
+                "updated": "2012-04-02T11:40:41Z",
+                "url": "http://arxiv.org/abs/1204.0375v1",
+                "pdf_url": "https://arxiv.org/pdf/1204.0375v1",
+                "source": "arxiv.org",
+                "primary_category": "cs.NI",
+                "categories": [
+                  "cs.NI"
+                ]
+              },
+              {
+                "arxiv_id": "1307.7042v1",
+                "title": "Python for education: permutations",
+                "summary": "Python implementation of permutations is presented. Three classes are introduced: Perm for permutations, Group for permutation groups, and PermError to report any errors for both classes. The class Perm is based on Python dictionaries and utilize cycle notation. The methods of calculation for the perm order, parity, ranking and unranking are given. A random permutation generation is also shown. The class Group is very simple and it is also based on dictionaries. It is mainly the presentation of the permutation groups interface with methods for the group order, subgroups (normalizer, centralizer, center, stabilizer), orbits, and several tests. The corresponding Python code is contained in the modules perms and groups.",
+                "authors": [
+                  "Andrzej Kapanowski"
+                ],
+                "published": "2013-07-26T14:18:21Z",
+                "updated": "2013-07-26T14:18:21Z",
+                "url": "http://arxiv.org/abs/1307.7042v1",
+                "pdf_url": "https://arxiv.org/pdf/1307.7042v1",
+                "source": "arxiv.org",
+                "primary_category": "cs.MS",
+                "categories": [
+                  "cs.MS",
+                  "math.HO"
+                ]
+              }
+            ],
+            "rate_limit_note": "arXiv may return 429 if called too frequently; this tool waits at least 3 seconds between requests in-process."
+          }
+        }
+      ]
+    },
+    {
+      "id": "X11_multi_hn_then_fetch",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Multi-turn: sau khi tìm HN, user cung cấp URL cụ thể → latest turn yêu cầu đọc nội dung → fetch đúng URL."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm bài nổi bật nhất về Rust trên Hacker News."
+        },
+        {
+          "role": "user",
+          "content": "Hay đấy, giờ đọc chi tiết bài đầu tiên tại https://hn.rust-post.example.com đi."
+        },
+        {
+          "role": "user",
+          "content": "Đọc đúng link đó thôi nhé."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://hn.rust-post.example.com"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://hn.rust-post.example.com"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "fetch",
+          "args": {
+            "url": "https://hn.rust-post.example.com"
+          },
+          "result": {
+            "tool": "read_url",
+            "url": "https://hn.rust-post.example.com",
+            "items": [
+              {
+                "title": "https://hn.rust-post.example.com",
+                "url": "https://hn.rust-post.example.com",
+                "source": "hn.rust-post.example.com",
+                "summary": ""
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "X12_multi_hn_carryover_query",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Multi-turn: giữ nguồn HN, chỉ đổi query từ WebGPU sang WebAssembly ở latest turn."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Dev cộng đồng HN đang bàn gì về WebGPU?"
+        },
+        {
+          "role": "user",
+          "content": "Còn về WebAssembly thì sao?"
+        },
+        {
+          "role": "user",
+          "content": "Vẫn tìm trên HN nhé, đổi chủ đề thành WebAssembly thôi."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "WebAssembly"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "hn_search",
+            "args": {
+              "query": "WebAssembly",
+              "sort_by": "recent",
+              "limit": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "hn_search",
+          "args": {
+            "query": "WebAssembly",
+            "sort_by": "recent",
+            "limit": 5
+          },
+          "result": {
+            "tool": "hn_search",
+            "query": "WebAssembly",
+            "sort_by": "recent",
+            "min_points": 0,
+            "item_count": 5,
+            "items": [
+              {
+                "title": "Show HN: Manim (3Blue1Brown's animation engine) in the browser via WebGPU",
+                "url": "https://studio.academa.ai/",
+                "source": "studio.academa.ai",
+                "summary": "36 points, 14 comments on Hacker News",
+                "points": 36,
+                "num_comments": 14,
+                "author": "sinaatalay",
+                "created_at": "2026-07-29T00:07:43Z",
+                "discussion_url": "https://news.ycombinator.com/item?id=49091703"
+              },
+              {
+                "title": "Show HN: Formally verified 3D CSG: Trust 93 lines spec, not 1000 lines AI code",
+                "url": "https://github.com/schildep/verified-3d-mesh-intersection",
+                "source": "github.com",
+                "summary": "108 points, 47 comments on Hacker News",
+                "points": 108,
+                "num_comments": 47,
+                "author": "permute",
+                "created_at": "2026-07-28T13:07:14Z",
+                "discussion_url": "https://news.ycombinator.com/item?id=49083239"
+              },
+              {
+                "title": "Show HN: SilkDrop – MilkDrop port for web with live editor",
+                "url": "https://silkdrop.vercel.app/",
+                "source": "silkdrop.vercel.app",
+                "summary": "2 points, 2 comments on Hacker News",
+                "points": 2,
+                "num_comments": 2,
+                "author": "usernameis42",
+                "created_at": "2026-07-27T20:40:49Z",
+                "discussion_url": "https://news.ycombinator.com/item?id=49075235"
+              },
+              {
+                "title": "Show HN: Taetype-WASM – Pure Rust, browser-only font engine in WebAssembly",
+                "url": "https://github.com/silly-tae/taetype-wasm",
+                "source": "github.com",
+                "summary": "2 points, 0 comments on Hacker News",
+                "points": 2,
+                "num_comments": 0,
+                "author": "silly-tae",
+                "created_at": "2026-07-27T14:55:26Z",
+                "discussion_url": "https://news.ycombinator.com/item?id=49070593"
+              },
+              {
+                "title": "Show HN: Imagerry – client-side image customizer and converter (WASM / WebGPU)",
+                "url": "https://imagerry.com/",
+                "source": "imagerry.com",
+                "summary": "2 points, 0 comments on Hacker News",
+                "points": 2,
+                "num_comments": 0,
+                "author": "its_ajseven",
+                "created_at": "2026-07-22T09:33:33Z",
+                "discussion_url": "https://news.ycombinator.com/item?id=49004013"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "X13_multi_send_confirmed",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Multi-turn: sau khi user xác nhận 'Có' ở turn cuối → gọi send với confirmed=true."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Đăng bản tin lên Telegram: 'AI weekly digest hôm nay'"
+        },
+        {
+          "role": "assistant",
+          "content": "Bạn có chắc muốn đăng lên Telegram không?"
+        },
+        {
+          "role": "user",
+          "content": "Có, đăng đi."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "send",
+            "args": {
+              "text": "AI weekly digest hôm nay",
+              "confirmed": true
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "send",
+            "args": {
+              "text": "AI weekly digest hôm nay",
+              "confirmed": true
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "send",
+          "args": {
+            "text": "AI weekly digest hôm nay",
+            "confirmed": true
+          },
+          "result": {
+            "tool": "send_telegram",
+            "error": "RuntimeError",
+            "message": "Missing TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID env var"
+          }
+        }
+      ]
+    },
+    {
+      "id": "X14_multi_send_refused",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Multi-turn: user từ chối ở turn cuối → KHÔNG gọi send, không thực hiện hành động gì."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Đăng tin này lên Telegram: 'Breaking AI news'"
+        },
+        {
+          "role": "assistant",
+          "content": "Bạn có chắc muốn đăng lên Telegram không?"
+        },
+        {
+          "role": "user",
+          "content": "Thôi không đăng nữa."
+        }
+      ],
+      "expect": {
+        "no_tool": true
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Đã hiểu, không đăng tin nữa. Nếu bạn cần gì khác, hãy cho tôi biết!",
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "X15_multi_switch_hn_to_web",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Multi-turn: user chuyển từ HN sang web news, giữ chủ đề React, apply timeframe=month từ latest turn."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "HN đang bàn gì về React?"
+        },
+        {
+          "role": "user",
+          "content": "Bỏ HN đi, tìm tin tức báo chí về React thôi."
+        },
+        {
+          "role": "user",
+          "content": "Tin trong tháng này."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "React",
+              "topic": "news",
+              "timeframe": "month"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "React",
+              "topic": "news",
+              "timeframe": "month"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "React",
+            "topic": "news",
+            "timeframe": "month"
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "React",
+            "topic": "news",
+            "timeframe": "month",
+            "items": [
+              {
+                "title": "Tribes React as Michigan Approves Line 5 Tunnel Permits - Earthjustice",
+                "url": "https://earthjustice.org/press/2026/tribes-react-as-michigan-approves-line-5-tunnel-permits",
+                "source": "earthjustice.org",
+                "summary": "ecosystems, pierced aquifers, violated our laws, and repeatedly shown contempt for tribal sovereignty. They have left devastation in their wake, and now they’re being rewarded with responsibility over one of the most precious and sacred resources in our state. The Great Lakes are not safe in their hands. This decision is a deep betrayal of our Great Lake State, and we will confront it immediately, fiercely, and without hesitation.” [...] Earthjustice: Because the earth needs a good lawyer.\n\nWe take on many of the biggest environmental and health challenges of our time and stick with them. The law makes change.\n\nBecause the earth needs a good lawyer.\n\nEarthjustice\n\nWe take on many of the biggest environmental and health challenges of our time and stick with them. The law makes change.\n\nBecause the earth needs a good lawyer.\n\nPress Room\n\n# Tribes React as Michigan Approves Line 5 Tunnel Permits [...] Michigan’s Department of Environment, Great Lakes, and Energy (EGLE) today approved a key set of permits sought by Enbridge to build its risky Line 5 tunnel, which would house the Canadian oil pipeline underneath the Straits of Mackinac for another century. The Bay Mills Indian Community, represented by Earthjustice and the Native American Rights Fund (NARF), has led Michigan tribal efforts to oppose the tunnel project before EGLE and other authorities for years.",
+                "score": 0.24576361
+              },
+              {
+                "title": "Mariners react to ‘surprise’ dismissal of popular hitting coach Bobby Magallenes | The Seattle Times",
+                "url": "https://www.seattletimes.com/sports/mariners/mariners-react-to-surprise-dismissal-of-popular-hitting-coach",
+                "source": "seattletimes.com",
+                "summary": "Skip to content\n\nMariners\n\n Mariners\n MLB\n Sports\n\n# Mariners react to ‘surprise’ dismissal of popular hitting coach Bobby Magallenes\n\nAdam Jude\n\nBy \n\nAdam Jude\n\nSeattle Times staff reporter\n\nARLINGTON, Texas — No one saw it coming, and no one was particularly happy about it. [...] That was the general reaction Friday inside the Globe Life Field visitors’ clubhouse to the news that assistant hitting coach Bobby Magallanes had been relieved of his duties a day before the start of a pivotal road series against the AL West-leading Texas Rangers.\n\nMagallanes, by all accounts, was a respected and popular figure among Mariners’ hitters, who were caught off guard Thursday by the decision. [...] “I just want to start off today by thanking Bobby for what he has done for this organization, the type of hitting coach he was, but more importantly the type of person he was,” Wilson said. “Bobby always brought incredible energy and positivity, and he’s going to be missed, no question. This game, sometimes you go through tough times and you lose people. You’re members of the family, and it’s always difficult.”",
+                "score": 0.1940625
+              },
+              {
+                "title": "Candidates for Wisconsin governor react to Madison shooting - WPR",
+                "url": "https://www.wpr.org/news/candidates-for-wisconsin-governor-react-to-madison-shooting",
+                "source": "wpr.org",
+                "summary": "Crowley said he’s curious to hear the officer’s reasons for shooting Ruiz and police accounts of the incident, adding that he wanted to ensure people’s rights to protest are respected. He said such situations can bring up trauma for residents and referenced the murder of George Floyd by Derek Chauvin, the former Minneapolis police officer. He also mentioned the shooting of Jacob Blake by Kenosha police officer Rusten Sheskey. [...] Democrats running to be Wisconsin’s next governor and Republican frontrunner Tom Tiffany are calling for a swift, transparent and independent investigation into the Madison police shooting of 38-year-old Corey Ruiz.  \n  \nThe shooting on Williamson Street in Madison has sparked protests at the state Capitol and renewed anger toward police. In the same neighborhood, Madison officers fatally shot unarmed Black teenager Tony Robinson in 2015 and 30-year-old white musician Paul Heenan in 2012. [...] “A governor’s role in a moment like this is to bring people together, to recognize that, you know, this is not only a loss to Madison, but this is a loss to the entire state,” Crowley said. “We got to figure out ways that we put policies, procedures, and standard operating procedures in place that, you know, stops these things from happening in the future.”",
+                "score": 0.18826461
+              },
+              {
+                "title": "A Homerist Reacts to Christopher Nolan’s “The Odyssey”",
+                "url": "https://hyperallergic.com/a-homerist-reacts-to-christopher-nolans-the-odyssey",
+                "source": "hyperallergic.com",
+                "summary": "The middle of Christopher Nolan’s The Odyssey (2026) delivers visceral discomfort. When the witch Circe (Samantha Morton) serves her transformative feast to Odysseus’s companions on the island of Aeaea, the camera tracks their voracious hunger, following their shift from greedily slurping, increasingly frantic men into squealing pigs. Circe physically wrests them out of one shape into another, later commenting that their appetites made them what they truly are. [...] hour once Odysseus returns home. [...] This is not Homer’s Odyssey. Let’s get that out of the way. As a Homerist, I had to remind myself of this throughout a film that reduces a narrative of 12,000 lines to just under three hours of airtime. The cuts are significant for someone who knows Homer well: The entire Phaeacian episode is gone; Matt Damon’s Odysseus never meets his father. Where the Homeric epic splits and gives its hero 12 books on Ithaca, the movie is about two-thirds journey and flashback with under an hour once Odysseus",
+                "score": 0.17275754
+              },
+              {
+                "title": "They Said It: Drivers React After Nashville",
+                "url": "https://www.indycar.com/videos/2026/07/07-20-they-said-it-drivers-react-after-nashville",
+                "source": "indycar.com",
+                "summary": "INDYCAR 101\n\n INDYCAR 101 Home\n The Basics\n What Makes INDYCAR Different?\n Technology\n Terms to Know\n Official Rulebook\n\n# They Said It: Drivers React After Nashville\n\nINDYCAR\n\n2 DAYS AGO\n\nShare:\n\nHear from Alexander Rossi, David Malukas, Josef Newgarden and Alex Palou as they react to the action-packed Borchetta Bourbon Music City Grand Prix at Nashville Superspeedway.\n\nShare:\n\n## Next Up\n\nThumbnail for Kyle Kirkwood's Pole Run at Nashville Superspeedway\n\n4 DAYS AGO\n\nINDYCAR [...] Practice 1 Highlights: 2026 INDYCAR at Nashville\n\nThumbnail for Practice 1 Highlights: 2026 INDYCAR at Nashville",
+                "score": 0.14160188
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

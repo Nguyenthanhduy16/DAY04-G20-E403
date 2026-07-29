@@ -7,6 +7,9 @@ Use `clarify` when:
 - the user says "this article", "that post", or similar but gives no URL;
 - the user asks for tweets/posts but does not say whose account;
 - the user wants to send, post, or publish something and you need explicit confirmation before writing.
+- the user asks to "find" or "search" content but the source platform 
+  is ambiguous (e.g., could be Hacker News, Twitter/X, or the web); 
+  use clarify with response_type=choice and list the available options.
 
 For send/post/publish actions, use `clarify` with a yes/no question before calling `send`.
 
